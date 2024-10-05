@@ -1,5 +1,5 @@
 ### Introduction
-Simple application like movie listing application. Feature includes:
+Simple console application like movie listing application IMDB. Feature includes:
 - user registration without authentication
 - Search all the movies in the app. Users can search for either title, cast or category and all
 matching movies should be returned in ascending order of movie title.
@@ -14,31 +14,62 @@ Welcome to Movie Listing App
 1. Login
 2. Exit
 Choose an option: 1
-Enter your email address to login: sa
+Enter your email address to login: Saiful@gmail.com
 Login successful!
 
-User Menu:
-1. View Profile
-2. Add Movie to System
-3. View System Movie List
-4. View Favorite Movies
+----------------User Menu:--------------------
+1. View Profile and Favorite Movie List
+2. Edit Profile
+3. Add New Movie to System
+4. View System Movie List
 5. Logout
-Choose an option: 4
-Your Favorite Movies:
+Choose an option: 1
+----------------------------Profile---------------------------------
+Email: 				Saiful@gmail.com
+Username: 			N/A
+Age: 				N/A
+Religion: 			N/A
+Favorite Movie(s):  0
+--------------------------------------------------------------------
+Your favorite movies:
 You have no favorite movies.
+-------------------------------------------------
 
-User Menu:
-1. View Profile
-2. Add Movie to System
-3. View System Movie List
-4. View Favorite Movies
+----------------User Menu:--------------------
+1. View Profile and Favorite Movie List
+2. Edit Profile
+3. Add New Movie to System
+4. View System Movie List
 5. Logout
-Choose an option: 3
-Do you want to search for movies by title, cast, or category? (y or enter to skip): 
+Choose an option: 2
+----------------------------Profile---------------------------------
+Email: 				Saiful@gmail.com
+Username: 			N/A
+Age: 				N/A
+Religion: 			N/A
+Favorite Movie(s):  0
+--------------------------------------------------------------------
+Enter your new username or press Enter to skip: maahi
+Username updated to: maahi
+Enter your age or press Enter to skip: 26
+Age updated to: 26
+Enter your religion or press Enter to skip: islam
+Religion updated to: islam
+Profile update complete.
+----------------------------Profile---------------------------------
+Email: 				Saiful@gmail.com
+Username: 			maahi
+Age: 				26
+Religion: 			islam
+Favorite Movie(s):  0
+--------------------------------------------------------------------
+-------------------------------------------------
 
-Movies in the system:
-2. Inception (2010); Genre: SCIFI, directed by Christopher Nolan
-1. Speak No Evil (2024); Genre: THRILLER, directed by James Watkins
-3. The Signature (2024); Genre: DRAMA, directed by Gajendra Vitthal Ahire
-Do you want to see more details about a movie? (y or enter to skip): 
+----------------User Menu:--------------------
+1. View Profile and Favorite Movie List
+2. Edit Profile
+3. Add New Movie to System
+4. View System Movie List
+5. Logout
+Choose an option: 
 ```
