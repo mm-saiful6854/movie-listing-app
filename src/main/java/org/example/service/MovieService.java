@@ -21,13 +21,17 @@ public class MovieService {
         return true;
     }
 
+    public Collection<MovieDTO> getAllMovies() {
+        return movies.values();
+    }
+
     public MovieDTO getMovieById(int id) {
         return movies.get(id);
     }
 
-    public List<MovieDTO> searchByCriteria(String title, String cast, MovieCategory category) {
+    public List<MovieDTO> searchByCriteria(@NonNull Collection<MovieDTO> movieCollection, String title, String cast, MovieCategory category) {
         List<MovieDTO> searchResult = new ArrayList<>();
-        for(MovieDTO movieDTO : movies.values()) {
+        for(MovieDTO movieDTO : movieCollection) {
             if(title!=null && !Objects.equals(movieDTO.getTitle(), title)) {
                 continue;
             }

@@ -1,6 +1,7 @@
 package org.example.service;
 
 import lombok.NonNull;
+import org.example.model.MovieDTO;
 import org.example.model.UserDTO;
 
 import java.util.HashMap;
@@ -30,5 +31,13 @@ public class UserService {
         user.setAge(userDTO.getAge());
         user.setReligion(userDTO.getReligion());
         return user;
+    }
+
+    public boolean addMovieToUserFavoriteList(String userEmail, MovieDTO movie) {
+        return false;
+    }
+
+    public boolean removeMovieToUserFavoriteList(String userEmail, MovieDTO movie) {
+        return false;
     }
 }
