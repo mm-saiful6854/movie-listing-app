@@ -2,7 +2,6 @@ package org.example;
 
 import org.example.model.UserDTO;
 import org.example.service.UserService;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -28,7 +27,7 @@ class MovieListingApplicationTest {
     }
 
     @Test
-    public void editUserPersonalDetails(){
+    public void editUserPersonalDetails() throws Exception {
         String username="Md Saiful Islam";
         int age= 27;
         String religion = "islam";
@@ -42,6 +41,12 @@ class MovieListingApplicationTest {
 
         assertNotNull(updatedProfile);
         assertEquals(username, updatedProfile.getUsername());
+
+        assertThrows(Exception.class, ()->{
+            UserDTO invalidUser = new UserDTO();
+            invalidUser.setEmail("unknown@gmail.com");
+            userService.updateUserProfile(invalidUser);
+        });
     }
 
     @Test
