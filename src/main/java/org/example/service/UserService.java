@@ -57,4 +57,8 @@ public class UserService {
         }
         return user.getFavoriteMovieList();
     }
+
+    public UserDTO validateUser(String email) {
+        return users.get(email);
+    }
 }

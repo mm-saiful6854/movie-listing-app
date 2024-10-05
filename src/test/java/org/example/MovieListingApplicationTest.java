@@ -29,7 +29,7 @@ class MovieListingApplicationTest {
         MovieDTO movie = new MovieDTO();
         movie.setId(MovieDTO.getNextID());
         movie.setTitle("Speak No Evil (2024)");
-        movie.setCategory(MovieCategory.Thriller);
+        movie.setCategory(MovieCategory.THRILLER);
         movie.setDirector("James Watkins");
         movie.setCast(new String[]{"James McAvoy", "Mackenzie Davis", "Scoot McNairy"});
         movieList.add(movie);
@@ -37,7 +37,7 @@ class MovieListingApplicationTest {
         movie = new MovieDTO();
         movie.setId(MovieDTO.getNextID());
         movie.setTitle("Inception (2010)");
-        movie.setCategory(MovieCategory.SciFi);
+        movie.setCategory(MovieCategory.SCIFI);
         movie.setDirector("Christopher Nolan");
         movie.setCast(new String[]{"Leonardo DiCaprio", "Joseph Gordon-Levitt", "Elliot Page"});
         movieList.add(movie);
@@ -46,7 +46,7 @@ class MovieListingApplicationTest {
         movie = new MovieDTO();
         movie.setId(MovieDTO.getNextID());
         movie.setTitle("The Signature (2024)");
-        movie.setCategory(MovieCategory.Drama);
+        movie.setCategory(MovieCategory.DRAMA);
         movie.setDirector("Gajendra Vitthal Ahire");
         movie.setCast(new String[]{"Mahima Chaudhry", "Herman Dsouza", "Manoj Joshi"});
         movieList.add(movie);
@@ -96,11 +96,12 @@ class MovieListingApplicationTest {
     @Test
     @Order(3)
     public void addMovieToUserFavoriteList(){
-        for(int i=0; i<movieList.size(); i++){
+        for(int i=0; i<3 && i<movieList.size(); i++){
             if(i%2==1) continue;
             boolean outcome = userService.addMovieToUserFavoriteList(userEmail, movieList.get(i));
             assertTrue(outcome);
         }
+        assertEquals(2, userService.getUserFavoriteList(userEmail).size());
     }
 
     @Test
@@ -127,6 +128,7 @@ class MovieListingApplicationTest {
             boolean outcome = userService.removeMovieToUserFavoriteList(userEmail, movieList.get(i));
             assertTrue(outcome);
         }
+        assertTrue(movieList.isEmpty());
     }
 
     //----------------------------------------------------------------
@@ -176,7 +178,7 @@ class MovieListingApplicationTest {
     public void searchMovieByCategory(){
         System.out.println("Search by Category");
         MovieDTO movie = movieList.get(0);
-        List<MovieDTO> searchResult = movieService.searchByCriteria(movieService.getAllMovies(),null,null,MovieCategory.Thriller);
+        List<MovieDTO> searchResult = movieService.searchByCriteria(movieService.getAllMovies(),null,null,MovieCategory.THRILLER);
         assertTrue(searchResult.contains(movie));
     }
 
@@ -185,7 +187,7 @@ class MovieListingApplicationTest {
     public void searchMovieByAllCriteria(){
         System.out.println("Search by All criteria");
         MovieDTO movie = movieList.get(0);
-        List<MovieDTO> searchResult = movieService.searchByCriteria(movieService.getAllMovies(),movie.getTitle(),movie.getCast()[0],MovieCategory.Thriller);
+        List<MovieDTO> searchResult = movieService.searchByCriteria(movieService.getAllMovies(),movie.getTitle(),movie.getCast()[0],MovieCategory.THRILLER);
         assertTrue(searchResult.contains(movie));
     }
 

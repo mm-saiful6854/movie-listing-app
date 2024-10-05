@@ -1,8 +1,8 @@
 package org.example.util;
 
 public enum MovieCategory {
-    Drama,
-    Thriller,
-    Horror,
-    SciFi;
+    DRAMA,
+    THRILLER,
+    HORROR,
+    SCIFI;
 }
