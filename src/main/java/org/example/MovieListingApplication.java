@@ -14,10 +14,16 @@ import java.util.Scanner;
 public class MovieListingApplication {
 
     private static final Scanner scanner = new Scanner(System.in);
-    private static MovieService movieService = new MovieService();
-    private static UserService userService = new UserService();
+    private static final MovieService movieService = new MovieService();
+    private static final UserService userService = new UserService();
     private static UserDTO loggedInUser = null;
 
+    /**
+     * Main method that starts the Movie Listing Application.
+     * It displays the main menu with options to login or exit the application.
+     *
+     * @param args the command-line arguments (not used)
+     */
     public static void main(String[] args) {
         System.out.println("Welcome to Movie Listing App");
         boolean isRunning = true;
@@ -30,7 +36,7 @@ public class MovieListingApplication {
             scanner.nextLine(); // Consume newline
 
             switch (choice) {
-                case 1 -> registerUser();
+                case 1 -> login();
                 case 2 -> {
                     isRunning = false;
                     System.out.println("Exiting the application...");
@@ -40,48 +46,115 @@ public class MovieListingApplication {
         }
     }
 
-    private static void registerUser() {
+    /**
+     * Prompts the user to enter an email for login.
+     * If the user is registered, it logs the user in and shows the user menu.
+     */
+    private static void login() {
         System.out.print("Enter your email address to login: ");
         String email = scanner.nextLine();
-        loggedInUser = userService.userRegistration(email);
-        if (loggedInUser != null) {
-            System.out.println("Login successful!");
-            showUserMenu();
-        } else {
-            System.out.println("Login failed. Invalid email.");
+        if (!email.isBlank()) {
+            loggedInUser = userService.userRegistration(email);
+            if (loggedInUser != null) {
+                System.out.println("Login successful!");
+                showUserMenu();
+            } else {
+                System.out.println("Login failed. Invalid email.");
+            }
         }
     }
 
-
+    /**
+     * Displays the user menu after successful login.
+     * The user can view their profile, edit it, view the system movie list, add a new movie, or log out.
+     */
     private static void showUserMenu() {
         boolean isRunning = true;
 
         while (isRunning) {
-            System.out.println("\nUser Menu:");
-            System.out.println("1. View Profile");
-            System.out.println("2. Add Movie to System");
-            System.out.println("3. View System Movie List");
-            System.out.println("4. View Favorite Movies");
+            System.out.println("\n----------------User Menu:--------------------");
+            System.out.println("1. View Profile and Favorite Movie List");
+            System.out.println("2. Edit Profile");
+            System.out.println("3. Add New Movie to System");
+            System.out.println("4. View System Movie List");
             System.out.println("5. Logout");
             System.out.print("Choose an option: ");
             int choice = scanner.nextInt();
             scanner.nextLine(); // Consume newline
 
             switch (choice) {
-                case 1 -> viewProfile();
-                case 2 -> addMovieToSystem();
-                case 3 -> viewSystemMovieList();
-                case 4 -> viewFavoriteMovies();
+                case 1 -> viewProfileAndFavoriteList();
+                case 2 -> editProfileInfo();
+                case 3 -> addNewMovieToSystem();
+                case 4 -> viewSystemMovieList();
                 case 5 -> {
                     isRunning = false;
                     System.out.println("Logging out...");
                 }
                 default -> System.out.println("Invalid choice. Please try again.");
             }
+            System.out.println("-------------------------------------------------");
         }
     }
 
-    private static void addMovieToSystem() {
+    /**
+     * Displays the user's profile information and their list of favorite movies.
+     */
+    private static void viewProfileAndFavoriteList() {
+        loggedInUser.display();
+        viewFavoriteMovies();
+    }
+
+    /**
+     * Edits the profile information of the logged-in user.
+     * Allows the user to update the username, age, and religion.
+     * If the user chooses to skip updating a particular field, the existing value remains unchanged.
+     */
+    private static void editProfileInfo() {
+        loggedInUser.display();
+
+        System.out.print("Enter your new username or press Enter to skip: ");
+        String option = scanner.nextLine();
+        if (option.trim().isEmpty()) {
+            System.out.println("Username is unchanged: " + (loggedInUser.getUsername() == null ? "N/A" : loggedInUser.getUsername()));
+        } else {
+            loggedInUser.setUsername(option);
+            System.out.println("Username updated to: " + loggedInUser.getUsername());
+        }
+
+        System.out.print("Enter your age or press Enter to skip: ");
+        option = scanner.nextLine();
+        if (option.trim().isEmpty()) {
+            System.out.println("Age is unchanged: " + (loggedInUser.getAge() <= 0 ? "N/A" : loggedInUser.getAge()));
+        } else {
+            try {
+                loggedInUser.setAge(Integer.parseInt(option));
+                System.out.println("Age updated to: " + loggedInUser.getAge());
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid age input. Please enter a valid number.");
+            }
+        }
+
+        System.out.print("Enter your religion or press Enter to skip: ");
+        option = scanner.nextLine();
+        if (option.trim().isEmpty()) {
+            System.out.println("Religion is unchanged: " + (loggedInUser.getReligion() == null ? "N/A" : loggedInUser.getReligion()));
+        } else {
+            loggedInUser.setReligion(option);
+            System.out.println("Religion updated to: " + loggedInUser.getReligion());
+        }
+
+        System.out.println("Profile update complete.");
+        loggedInUser.display();
+
+    }
+
+    /**
+     * Allows the user to add a new movie to the system by entering movie details.
+     * Prompts for title, director, cast, category, release date, and budget.
+     * The movie is added to the system if it does not already exist.
+     */
+    private static void addNewMovieToSystem() {
         System.out.println("Enter movie title: ");
         String title = scanner.nextLine();
 
@@ -112,70 +185,33 @@ public class MovieListingApplication {
         movie.setBudget(budget);
 
         // Add the movie to the system
-        try{
+        try {
             boolean added = movieService.addMovieToSystem(movie);
             if (added) {
                 System.out.println("Movie successfully added to the system.");
             } else {
                 System.out.println("Failed to add movie. It may already exist.");
             }
-        }catch (Exception error){
-            System.out.println("Failed to add movie. "+error.getMessage());
+        } catch (Exception error) {
+            System.out.println("Failed to add movie. " + error.getMessage());
         }
 
     }
 
-
-    private static void viewProfile() {
-        loggedInUser.display();
-        editProfile();
-        loggedInUser.display();
-    }
-
-    private static void editProfile() {
-        System.out.print("Enter your new username or press Enter to skip: ");
-        String option = scanner.nextLine();
-        if(option.trim().isEmpty()) {
-            System.out.println("Username is unchanged: " + (loggedInUser.getUsername()==null?"N/A":loggedInUser.getUsername()));
-        } else {
-            loggedInUser.setUsername(option);
-            System.out.println("Username updated to: " + loggedInUser.getUsername());
-        }
-
-        System.out.print("Enter your age or press Enter to skip: ");
-        option = scanner.nextLine();
-        if(option.trim().isEmpty()) {
-            System.out.println("Age is unchanged: " + (loggedInUser.getAge()<=0?"N/A":loggedInUser.getAge()));
-        } else {
-            try {
-                loggedInUser.setAge(Integer.parseInt(option));
-                System.out.println("Age updated to: " + loggedInUser.getAge());
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid age input. Please enter a valid number.");
-            }
-        }
-
-        System.out.print("Enter your religion or press Enter to skip: ");
-        option = scanner.nextLine();
-        if(option.trim().isEmpty()) {
-            System.out.println("Religion is unchanged: " + (loggedInUser.getReligion()==null?"N/A":loggedInUser.getReligion()));
-        } else {
-            loggedInUser.setReligion(option);
-            System.out.println("Religion updated to: " + loggedInUser.getReligion());
-        }
-
-        System.out.println("Profile update complete.");
-    }
-
-
+    /**
+     * Displays the list of all movies in the system.
+     * Allows users to search by movie title, cast, or category.
+     * Prompts the user to view detailed information for a selected movie.
+     */
     private static void viewSystemMovieList() {
+        System.out.println("Movies in the system:");
         Collection<MovieDTO> movies = movieService.getAllMovies();
         if (movies.isEmpty()) {
             System.out.println("No movies found.");
             return;
         }
 
-        System.out.println("Do you want to search for movies by title, cast, or category? (y/n): ");
+        System.out.println("Do you want to search for movies by title, cast, or category? (y or enter to skip): ");
         String searchResponse = scanner.nextLine();
 
         List<MovieDTO> filteredMovies;
@@ -202,7 +238,7 @@ public class MovieListingApplication {
         if (filteredMovies.isEmpty()) {
             System.out.println("No movies matched your search criteria.");
         } else {
-            System.out.println("Movies in the system:");
+            System.out.println("Search Results:");
             for (MovieDTO movie : filteredMovies) {
                 movie.preview();
             }
@@ -211,19 +247,20 @@ public class MovieListingApplication {
         }
     }
 
-
-
-
+    /**
+     * Displays the user's favorite movies and allows searching within the list by title, cast, or category.
+     * If no favorite movies exist, it informs the user.
+     * Allows the user to view detailed information for a movie or remove a movie from the favorites list.
+     */
     private static void viewFavoriteMovies() {
-        System.out.println("Your Favorite Movies:");
-
+        System.out.println("Your favorite movies:");
         List<MovieDTO> favoriteMovies = userService.getUserFavoriteList(loggedInUser.getEmail());
         if (favoriteMovies.isEmpty()) {
             System.out.println("You have no favorite movies.");
             return;
         }
 
-        System.out.println("Do you want to search your favorite movies by title, cast, or category? (y/n): ");
+        System.out.println("Do you want to search your favorite movies by title, cast, or category? (y or enter to skip): ");
         String searchResponse = scanner.nextLine();
 
         List<MovieDTO> filteredMovies;
@@ -249,7 +286,7 @@ public class MovieListingApplication {
         if (filteredMovies.isEmpty()) {
             System.out.println("No favorite movies matched your search criteria.");
         } else {
-            System.out.println("Your favorite movies:");
+            System.out.println("Search Results:");
             for (MovieDTO movie : filteredMovies) {
                 movie.preview();
             }
@@ -257,9 +294,15 @@ public class MovieListingApplication {
         }
     }
 
-
+    /**
+     * Prompts the user to view detailed information for a movie after a search.
+     * If the movie is in the general list, the user is prompted to add it to their favorite list.
+     * If the movie is in the favorites list, the user is prompted to remove it.
+     *
+     * @param promptForAddingFavorite a flag indicating whether the movie can be added to the favorites list (true) or removed (false)
+     */
     private static void movieDetailPrompt(boolean promptForAddingFavorite) {
-        System.out.print("Do you want to see more details about a movie? (y/n): ");
+        System.out.print("Do you want to see more details about a movie? (y or enter to skip): ");
         String response = scanner.nextLine();
         if (response.equalsIgnoreCase("y")) {
             System.out.print("Enter movie ID to view details: ");
@@ -268,12 +311,19 @@ public class MovieListingApplication {
             MovieDTO movie = movieService.getMovieById(movieId);
             if (movie != null) {
                 movie.display();
-                if(promptForAddingFavorite){
-                    System.out.print("Do you want to add this movie to your favorites? (y/n): ");
+                if (promptForAddingFavorite) {
+                    System.out.print("Do you want to add this movie to your favorites? (y or enter to skip): ");
                     String addFavorite = scanner.nextLine();
                     if (addFavorite.equalsIgnoreCase("y")) {
                         userService.addMovieToUserFavoriteList(loggedInUser.getEmail(), movie);
                         System.out.println("Movie added to favorites.");
+                    }
+                } else {
+                    System.out.print("Do you want to remove this movie from your favorites? (y or enter to skip): ");
+                    String addFavorite = scanner.nextLine();
+                    if (addFavorite.equalsIgnoreCase("y")) {
+                        userService.removeMovieToUserFavoriteList(loggedInUser.getEmail(), movie);
+                        System.out.println("Movie removed from favorites.");
                     }
                 }
 
