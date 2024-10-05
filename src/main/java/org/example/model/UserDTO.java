@@ -10,5 +10,5 @@ public class UserDTO {
     private String username;
     private int age;
     private String religion;
-    private ArrayList<MovieDTO> favoriteMovieIDs=new ArrayList<>();
+    private ArrayList<MovieDTO> favoriteMovieList = new ArrayList<>();
 }

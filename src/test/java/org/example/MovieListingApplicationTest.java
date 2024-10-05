@@ -107,12 +107,21 @@ class MovieListingApplicationTest {
     @Order(4)
     public void searchMovieFromUserFavoriteList(){
         List<MovieDTO> favoriteList = userService.getUserFavoriteList(userEmail);
-        movieService.searchByCriteria(favoriteList, movieList.get(1).getTitle(),null, null);
+        System.out.println("Favorite movies: "+favoriteList);
+
+        List<MovieDTO> searchResult = movieService.searchByCriteria(favoriteList, movieList.get(1).getTitle(),null, null);
+        System.out.println("SearchResult from userFavoriteList: "+searchResult);
+        assertFalse(searchResult.contains(movieList.get(1)));
+
+        searchResult = movieService.searchByCriteria(favoriteList, movieList.get(0).getTitle(),null, null);
+        System.out.println("SearchResult from userFavoriteList: "+searchResult);
+        assertTrue(searchResult.contains(movieList.get(0)));
     }
 
     @Test
     @Order(5)
     public void removeMovieToUserFavoriteList(){
+        System.out.println("Remove movie from user favorite list");
         for(int i=0; i<movieList.size(); i++){
             if(i%2==1) continue;
             boolean outcome = userService.removeMovieToUserFavoriteList(userEmail, movieList.get(i));
