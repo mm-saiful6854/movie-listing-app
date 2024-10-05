@@ -4,7 +4,9 @@ import lombok.NonNull;
 import org.example.model.MovieDTO;
 import org.example.model.UserDTO;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class UserService {
@@ -34,10 +36,22 @@ public class UserService {
     }
 
     public boolean addMovieToUserFavoriteList(String userEmail, MovieDTO movie) {
-        return false;
+        UserDTO user = users.get(userEmail);
+        if(user==null) {
+            throw new IllegalArgumentException("User "+userEmail+" is not registered.");
+        }
+        return user.getFavoriteMovieIDs().add(movie);
     }
 
     public boolean removeMovieToUserFavoriteList(String userEmail, MovieDTO movie) {
-        return false;
+        UserDTO user = users.get(userEmail);
+        if(user==null) {
+            throw new IllegalArgumentException("User "+userEmail+" is not registered.");
+        }
+        return user.getFavoriteMovieIDs().remove(movie);
+    }
+
+    public List<MovieDTO> getUserFavoriteList(String userEmail) {
+        return null;
     }
 }

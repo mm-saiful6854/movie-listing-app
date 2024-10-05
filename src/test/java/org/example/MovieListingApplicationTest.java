@@ -106,8 +106,8 @@ class MovieListingApplicationTest {
     @Test
     @Order(4)
     public void searchMovieFromUserFavoriteList(){
-
-
+        List<MovieDTO> favoriteList = userService.getUserFavoriteList(userEmail);
+        movieService.searchByCriteria(favoriteList, movieList.get(1).getTitle(),null, null);
     }
 
     @Test
