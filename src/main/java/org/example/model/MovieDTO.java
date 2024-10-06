@@ -1,6 +1,8 @@
 package org.example.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.example.util.MovieCategory;
 
 import java.util.Arrays;
@@ -11,6 +13,8 @@ import java.util.Arrays;
  * release date, budget, and a unique ID.
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class MovieDTO {
 
     /** Static counter to assign a unique ID to each movie. */

@@ -158,20 +158,20 @@ public class MovieListingApplication {
         System.out.println("Enter movie title: ");
         String title = scanner.nextLine();
 
-        System.out.println("Enter movie director: ");
+        System.out.println("Enter movie director name: ");
         String director = scanner.nextLine();
 
         System.out.println("Enter movie cast (comma separated): ");
         String[] cast = scanner.nextLine().split(",");
 
-        System.out.println("Enter movie category (e.g., Scifi, Action, Thriller, Comedy): ");
+        System.out.println("Enter movie category (e.g., Scifi, Action, Thriller, Comedy, Drama or Horror): ");
         String categoryInput = scanner.nextLine();
         MovieCategory category = MovieCategory.valueOf(categoryInput.toUpperCase());
 
-        System.out.println("Enter movie release date (format: YYYY-MM-DD): ");
+        System.out.println("Enter movie release date: ");
         String releaseDate = scanner.nextLine();
 
-        System.out.println("Enter movie budget (Million/Billion): ");
+        System.out.println("Enter movie budget (enter prefix like K,M or B): ");
         String budget = scanner.nextLine();
 
         // Create a new movie object

@@ -6,5 +6,6 @@ public enum MovieCategory {
     COMEDY,
     THRILLER,
     HORROR,
-    SCIFI;
+    SCIFI,
+    ROMANCE,;
 }

@@ -5,6 +5,7 @@ import org.example.model.MovieDTO;
 import org.example.util.MovieCategory;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * The MovieService class handles operations related to managing and retrieving movies,
@@ -20,35 +21,20 @@ public class MovieService {
     public MovieService(){
         movies = new HashMap<>();
 
-        MovieDTO movie = new MovieDTO();
-        movie.setId(MovieDTO.getNextID());
-        movie.setTitle("Speak No Evil (2024)");
-        movie.setCategory(MovieCategory.THRILLER);
-        movie.setDirector("James Watkins");
-        movie.setCast(new String[]{"James McAvoy", "Mackenzie Davis", "Scoot McNairy"});
-        movie.setReleaseDate("2024-10-04 (United States)");
-        movie.setBudget("40M");
+        //system default movie list
+        MovieDTO movie = new MovieDTO(MovieDTO.getNextID(),"Speak No Evil (2024)","James Watkins",new String[]{"James McAvoy", "Mackenzie Davis", "Scoot McNairy"},MovieCategory.THRILLER,"2024-10-04 (United States)","40M");
         movies.put(movie.getId(), movie);
 
-        movie = new MovieDTO();
-        movie.setId(MovieDTO.getNextID());
-        movie.setTitle("Inception (2010)");
-        movie.setCategory(MovieCategory.SCIFI);
-        movie.setDirector("Christopher Nolan");
-        movie.setCast(new String[]{"Leonardo DiCaprio", "Joseph Gordon-Levitt", "Elliot Page"});
-        movie.setReleaseDate("Jul 16, 2010 (United States)");
-        movie.setBudget("10M");
+        movie = new MovieDTO(MovieDTO.getNextID(),"Inception (2010)","Christopher Nolan",new String[]{"Leonardo DiCaprio", "Joseph Gordon-Levitt", "Elliot Page"},MovieCategory.SCIFI,"Jul 16, 2010 (United States)","10M");
         movies.put(movie.getId(), movie);
 
+        movie = new MovieDTO(MovieDTO.getNextID(),"The Signature (2024)","Gajendra Vitthal Ahire",new String[]{"Mahima Chaudhry", "Herman Dsouza", "Manoj Joshi"},MovieCategory.DRAMA,"2024-10-04 (India)","100M");
+        movies.put(movie.getId(), movie);
 
-        movie = new MovieDTO();
-        movie.setId(MovieDTO.getNextID());
-        movie.setTitle("The Signature (2024)");
-        movie.setCategory(MovieCategory.DRAMA);
-        movie.setDirector("Gajendra Vitthal Ahire");
-        movie.setCast(new String[]{"Mahima Chaudhry", "Herman Dsouza", "Manoj Joshi"});
-        movie.setReleaseDate("2024-10-04 (India)");
-        movie.setBudget("100M");
+        movie = new MovieDTO(MovieDTO.getNextID(),"Deadpool & Wolverine (2024)","Shawn Levy",new String[]{"Ryan Reynolds", "Hugh Jackman", "Emma Corrin"},MovieCategory.COMEDY,"Jul 26, 2024 (United States)","100M");
+        movies.put(movie.getId(), movie);
+
+        movie = new MovieDTO(MovieDTO.getNextID(),"It Ends with Us (2024)","Justin Baldoni",new String[]{"Blake Lively", "Justin Baldoni", "Jenny Slate"},MovieCategory.ROMANCE,"Aug 09, 2024 (United States)","15M");
         movies.put(movie.getId(), movie);
     }
 
@@ -100,22 +86,12 @@ public class MovieService {
      * @return a list of MovieDTO objects that match the search criteria, sorted by title.
      */
     public List<MovieDTO> searchByCriteria(@NonNull Collection<MovieDTO> movieCollection, String title, String cast, MovieCategory category) {
-        List<MovieDTO> searchResult = new ArrayList<>();
-        for(MovieDTO movieDTO : movieCollection) {
-            if(title!=null && !movieDTO.getTitle().toLowerCase().contains(title.toLowerCase())) {
-                continue;
-            }
-            else if(cast!=null && !movieDTO.isCastIncluded(cast)) {
-                continue;
-            }
-            else if(category!=null && !Objects.equals(movieDTO.getCategory(),category)) {
-                continue;
-            }
-            searchResult.add(movieDTO);
-        }
-
-        searchResult.sort(Comparator.comparing(MovieDTO::getTitle));
-        return searchResult;
+        return movieCollection.stream()
+                .filter(movieDTO -> (title == null || movieDTO.getTitle().toLowerCase().contains(title.toLowerCase())))
+                .filter(movieDTO -> (cast == null || movieDTO.isCastIncluded(cast)))
+                .filter(movieDTO -> (category == null || movieDTO.getCategory() == category))
+                .sorted(Comparator.comparing(MovieDTO::getTitle))
+                .collect(Collectors.toList());
     }
 
 
